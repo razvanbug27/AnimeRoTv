@@ -109,9 +109,9 @@ private val catalog = listOf(
     AnimeItem("Spirited Away", "2001", "Aventură • Fantasy • Film", "O fată ajunge într-o lume magică și încearcă să-și salveze părinții.", "CATALOG")
 )
 
-private val bg = Color(0xFF080B14)
-private val panel = Color(0xFF151B2B)
-private val accent = Color(0xFFFFB000)
+private val bg = Color(0xFF100509)
+private val panel = Color(0xFF1B0B10)
+private val accent = Color(0xFFE51B32)
 private val muted = Color(0xFF9BA6BD)
 
 class MainActivity : ComponentActivity() {
@@ -168,7 +168,7 @@ private fun AnimeRoApp() {
                 Spacer(Modifier.width(18.dp))
                 Text("UNIVERSUL ANIME, ÎNTR-UN SINGUR LOC", color = muted, fontSize = 11.sp)
                 Spacer(Modifier.weight(1f))
-                Text("v1.0.0", color = muted, fontSize = 12.sp)
+                Text("v1.0.1", color = muted, fontSize = 12.sp)
             }
             Spacer(Modifier.height(18.dp))
             Text("Descoperă următorul tău anime.", color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold)
