@@ -30,68 +30,68 @@ private data class AnimeItem(
 )
 
 private val catalog = listOf(
-    AnimeItem("Academia eroilor", "2016", "Acțiune • Supereroi", "Izuku visează să devină un erou într-o lume în care aproape toți au puteri.", "NETFLIX RO"),
-    AnimeItem("Hunter x Hunter", "2011", "Aventură • Acțiune", "Gon pornește într-o călătorie pentru a-și găsi tatăl și a deveni vânător.", "NETFLIX RO"),
-    AnimeItem("Caietul morții", "2006", "Thriller • Mister", "Un elev descoperă un caiet cu puterea de a schimba destine.", "NETFLIX RO"),
-    AnimeItem("The Seven Deadly Sins", "2014", "Fantasy • Acțiune", "O prințesă caută un grup legendar de cavaleri pentru a-și salva regatul.", "NETFLIX RO"),
-    AnimeItem("Saga Vinland", "2019", "Acțiune • Istoric", "Un tânăr războinic caută sensul răzbunării într-o lume a vikingilor.", "NETFLIX RO"),
-    AnimeItem("JoJo's Bizarre Adventure", "2012", "Acțiune • Supranatural", "Generații ale familiei Joestar se confruntă cu amenințări extraordinare.", "NETFLIX RO"),
-    AnimeItem("Sword Art Online", "2012", "Aventură • SF", "Jucătorii rămân blocați într-un joc online periculos.", "NETFLIX RO"),
-    AnimeItem("Profeția Ragnarok", "2021", "Acțiune • Fantasy", "Luptători legendari înfruntă zeii într-un turneu decisiv.", "NETFLIX RO"),
-    AnimeItem("Cyberpunk: Edgerunners", "2022", "SF • Acțiune", "Un tânăr încearcă să supraviețuiască într-un oraș dominat de tehnologie.", "NETFLIX RO"),
-    AnimeItem("Sakamoto Days", "2025", "Acțiune • Comedie", "Un fost asasin încearcă să ducă o viață liniștită.", "NETFLIX RO"),
-    AnimeItem("Blue Box", "2024", "Romance • Sport", "Doi elevi se apropie prin sport și viața de liceu.", "NETFLIX RO"),
-    AnimeItem("Kuroko", "2012", "Sport • Dramă", "O echipă de baschet încearcă să ajungă în vârful competiției.", "NETFLIX RO"),
-    AnimeItem("Castlevania", "2017", "Fantasy • Acțiune", "Un vânător de vampiri luptă împotriva forțelor întunericului.", "NETFLIX RO"),
-    AnimeItem("BAKI", "2018", "Acțiune • Arte marțiale", "Baki își testează limitele în confruntări extreme.", "NETFLIX RO"),
-    AnimeItem("Hajime no Ippo: Lupta", "2000", "Sport • Dramă", "Un adolescent timid descoperă boxul și începe să se antreneze.", "NETFLIX RO"),
-    AnimeItem("Căsnicia mea fericită", "2023", "Dramă • Fantasy", "O tânără descoperă iubirea și o lume plină de puteri misterioase.", "NETFLIX RO"),
-    AnimeItem("Kakegurui", "2017", "Thriller • Dramă", "Într-o academie neobișnuită, statutul elevilor depinde de jocuri de noroc.", "NETFLIX RO"),
-    AnimeItem("Baki Hanma", "2021", "Acțiune • Arte marțiale", "Baki se pregătește pentru cea mai grea confruntare a sa.", "NETFLIX RO"),
-    AnimeItem("Parasyte: The Maxim", "2014", "SF • Horror", "Un adolescent împarte propriul corp cu o creatură extraterestră.", "NETFLIX RO"),
-    AnimeItem("Ranma 1/2", "2024", "Comedie • Arte marțiale", "Un luptător este prins într-un blestem cu efecte neașteptate.", "NETFLIX RO"),
-    AnimeItem("Viața dezastruoasă a lui Saiki K.", "2016", "Comedie • Supranatural", "Un adolescent cu puteri psihice vrea doar o viață normală.", "NETFLIX RO"),
-    AnimeItem("Kengan Ashura", "2019", "Acțiune • Arte marțiale", "Luptători reprezintă companii în turnee brutale.", "NETFLIX RO"),
-    AnimeItem("BEASTARS", "2019", "Dramă • Mister", "Un lup încearcă să-și înțeleagă instinctele într-o societate tensionată.", "NETFLIX RO"),
-    AnimeItem("Monster", "2004", "Thriller • Mister", "Un medic pornește în căutarea unui fost pacient devenit periculos.", "NETFLIX RO"),
-    AnimeItem("Komi nu știe să comunice", "2021", "Comedie • Romance", "O elevă timidă încearcă să-și facă o sută de prieteni.", "NETFLIX RO"),
-    AnimeItem("Ouran High School Host Club", "2006", "Comedie • Romance", "O elevă ajunge într-un club școlar cu reguli neobișnuite.", "NETFLIX RO"),
-    AnimeItem("The Summer Hikaru Died", "2025", "Mister • Supranatural", "Un adolescent observă că prietenul său s-a întors schimbat.", "NETFLIX RO"),
-    AnimeItem("Delicious in Dungeon", "2024", "Fantasy • Aventură", "Un grup de aventurieri explorează o temniță și gătește creaturi fantastice.", "NETFLIX RO"),
-    AnimeItem("Neon Genesis Evangelion", "1995", "SF • Dramă", "Adolescenți pilotează roboți uriași pentru a apăra omenirea.", "NETFLIX RO"),
-    AnimeItem("Yu Yu Hakusho", "1992", "Acțiune • Supranatural", "Un adolescent devine detectiv al lumii spiritelor.", "NETFLIX RO"),
-    AnimeItem("Regele șaman", "2021", "Aventură • Fantasy", "Șamanii se pregătesc pentru un turneu care decide Regele Șaman.", "NETFLIX RO"),
-    AnimeItem("Violet Evergarden", "2018", "Dramă • Fantasy", "O fostă soldată învață să înțeleagă emoțiile oamenilor prin scrisori.", "NETFLIX RO"),
-    AnimeItem("Cowboy Bebop", "1998", "SF • Aventură", "Vânători de recompense călătoresc prin spațiu.", "NETFLIX RO"),
-    AnimeItem("Dorohedoro", "2020", "Fantasy • Acțiune", "Un bărbat cu cap de reptilă caută adevărul despre transformarea sa.", "NETFLIX RO"),
-    AnimeItem("Aggretsuko", "2018", "Comedie • Viață", "O angajată își descarcă frustrările prin karaoke metal.", "NETFLIX RO"),
-    AnimeItem("PLUTO", "2023", "SF • Mister", "Un detectiv robot investighează o serie de crime misterioase.", "ROMÂNĂ CONFIRMATĂ"),
-    AnimeItem("Kotaro locuiește singur", "2022", "Comedie • Dramă", "Un băiețel neobișnuit schimbă viața vecinilor săi.", "NETFLIX RO"),
-    AnimeItem("Blue Period", "2021", "Dramă • Artă", "Un elev descoperă pasiunea pentru pictură și intră într-o lume competitivă.", "NETFLIX RO"),
-    AnimeItem("EDENS ZERO", "2021", "SF • Aventură", "Un tânăr pornește într-o călătorie prin univers.", "NETFLIX RO"),
-    AnimeItem("Unchiul dintr-o altă lume", "2022", "Comedie • Fantasy", "Un bărbat se trezește după ani de comă cu amintiri dintr-o lume fantastică.", "NETFLIX RO"),
-    AnimeItem("SPRIGGAN", "2022", "Acțiune • SF", "Agenți speciali protejează relicve ale unei civilizații antice.", "NETFLIX RO"),
-    AnimeItem("Onmyoji", "2023", "Fantasy • Supranatural", "Un maestru al spiritelor rezolvă mistere în Japonia imperială.", "NETFLIX RO"),
-    AnimeItem("My Daemon", "2023", "Aventură • SF", "Un băiat și o creatură specială pornesc într-o călătorie.", "NETFLIX RO"),
-    AnimeItem("Superescrocii", "2021", "Acțiune • Crimă", "Un grup de infractori cu puteri speciale pregătește o lovitură.", "NETFLIX RO"),
-    AnimeItem("Viața unui casnic", "2021", "Comedie • Viață", "Un fost membru yakuza se ocupă acum de treburile casei.", "NETFLIX RO"),
-    AnimeItem("Leviathan", "2025", "SF • Aventură", "O poveste alternativă despre război și mașinării extraordinare.", "NETFLIX RO"),
-    AnimeItem("GAMERA: Renașterea", "2023", "Acțiune • SF", "Copiii întâlnesc o creatură gigantică ce apără omenirea.", "NETFLIX RO"),
-    AnimeItem("Noapte bună, lume!", "2023", "SF • Dramă", "O familie fragmentată se intersectează într-o lume virtuală.", "NETFLIX RO"),
-    AnimeItem("Castlevania: Nocturne", "2023", "Fantasy • Acțiune", "Un vânător de vampiri se ridică împotriva unei noi amenințări.", "NETFLIX RO"),
-    AnimeItem("DOTA: Sângele dragonului", "2021", "Fantasy • Acțiune", "Un cavaler dragon este prins într-un conflict între forțe magice.", "NETFLIX RO"),
-    AnimeItem("Black Clover: Sabia Regelui Vrăjitor", "2023", "Fantasy • Film", "Asta și prietenii săi se confruntă cu foști regi vrăjitori.", "NETFLIX RO"),
-    AnimeItem("Prințesa Mononoke", "1997", "Fantasy • Film", "Un tânăr ajunge în mijlocul conflictului dintre oameni și natură.", "NETFLIX RO"),
-    AnimeItem("Băiatul și stârcul", "2023", "Fantasy • Film", "Un băiat descoperă o lume misterioasă după o pierdere.", "NETFLIX RO"),
-    AnimeItem("Ponyo", "2008", "Fantasy • Film", "O creatură marină visează să devină om.", "NETFLIX RO"),
-    AnimeItem("Vecinul meu Totoro", "1988", "Fantasy • Film", "Două surori descoperă spirite magice în apropierea casei.", "NETFLIX RO"),
-    AnimeItem("Kiki: Livrări la domiciliu", "1989", "Aventură • Film", "O tânără vrăjitoare își începe viața independentă.", "NETFLIX RO"),
-    AnimeItem("Povestea prințesei Kaguya", "2013", "Dramă • Film", "O fetiță misterioasă crește și își caută propriul drum.", "NETFLIX RO"),
-    AnimeItem("Lumea secretă a lui Arrietty", "2010", "Aventură • Film", "O fetiță minusculă trăiește ascunsă în casa oamenilor.", "NETFLIX RO"),
-    AnimeItem("Regatul pisicilor", "2002", "Fantasy • Film", "O adolescentă ajunge într-un regat fantastic al pisicilor.", "NETFLIX RO"),
-    AnimeItem("Șoapte din inimă", "1995", "Dramă • Film", "O adolescentă își descoperă pasiunea pentru povești și scris.", "NETFLIX RO"),
-    AnimeItem("Mary și floarea vrăjitoarei", "2017", "Fantasy • Film", "O fată descoperă o floare care îi oferă puteri magice.", "NETFLIX RO"),
-    AnimeItem("Cosmica prințesă Kaguya!", "2026", "SF • Muzical • Film", "O fată misterioasă intră într-o lume virtuală plină de muzică.", "ROMÂNĂ CONFIRMATĂ"),
+    AnimeItem("Academia eroilor", "2016", "Acțiune • Supereroi", "Izuku visează să devină un erou într-o lume în care aproape toți au puteri.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Hunter x Hunter", "2011", "Aventură • Acțiune", "Gon pornește într-o călătorie pentru a-și găsi tatăl și a deveni vânător.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Caietul morții", "2006", "Thriller • Mister", "Un elev descoperă un caiet cu puterea de a schimba destine.", "VERIFICĂ ÎN RO"),
+    AnimeItem("The Seven Deadly Sins", "2014", "Fantasy • Acțiune", "O prințesă caută un grup legendar de cavaleri pentru a-și salva regatul.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Saga Vinland", "2019", "Acțiune • Istoric", "Un tânăr războinic caută sensul răzbunării într-o lume a vikingilor.", "VERIFICĂ ÎN RO"),
+    AnimeItem("JoJo's Bizarre Adventure", "2012", "Acțiune • Supranatural", "Generații ale familiei Joestar se confruntă cu amenințări extraordinare.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Sword Art Online", "2012", "Aventură • SF", "Jucătorii rămân blocați într-un joc online periculos.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Profeția Ragnarok", "2021", "Acțiune • Fantasy", "Luptători legendari înfruntă zeii într-un turneu decisiv.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Cyberpunk: Edgerunners", "2022", "SF • Acțiune", "Un tânăr încearcă să supraviețuiască într-un oraș dominat de tehnologie.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Sakamoto Days", "2025", "Acțiune • Comedie", "Un fost asasin încearcă să ducă o viață liniștită.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Blue Box", "2024", "Romance • Sport", "Doi elevi se apropie prin sport și viața de liceu.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Kuroko", "2012", "Sport • Dramă", "O echipă de baschet încearcă să ajungă în vârful competiției.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Castlevania", "2017", "Fantasy • Acțiune", "Un vânător de vampiri luptă împotriva forțelor întunericului.", "VERIFICĂ ÎN RO"),
+    AnimeItem("BAKI", "2018", "Acțiune • Arte marțiale", "Baki își testează limitele în confruntări extreme.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Hajime no Ippo: Lupta", "2000", "Sport • Dramă", "Un adolescent timid descoperă boxul și începe să se antreneze.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Căsnicia mea fericită", "2023", "Dramă • Fantasy", "O tânără descoperă iubirea și o lume plină de puteri misterioase.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Kakegurui", "2017", "Thriller • Dramă", "Într-o academie neobișnuită, statutul elevilor depinde de jocuri de noroc.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Baki Hanma", "2021", "Acțiune • Arte marțiale", "Baki se pregătește pentru cea mai grea confruntare a sa.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Parasyte: The Maxim", "2014", "SF • Horror", "Un adolescent împarte propriul corp cu o creatură extraterestră.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Ranma 1/2", "2024", "Comedie • Arte marțiale", "Un luptător este prins într-un blestem cu efecte neașteptate.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Viața dezastruoasă a lui Saiki K.", "2016", "Comedie • Supranatural", "Un adolescent cu puteri psihice vrea doar o viață normală.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Kengan Ashura", "2019", "Acțiune • Arte marțiale", "Luptători reprezintă companii în turnee brutale.", "VERIFICĂ ÎN RO"),
+    AnimeItem("BEASTARS", "2019", "Dramă • Mister", "Un lup încearcă să-și înțeleagă instinctele într-o societate tensionată.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Monster", "2004", "Thriller • Mister", "Un medic pornește în căutarea unui fost pacient devenit periculos.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Komi nu știe să comunice", "2021", "Comedie • Romance", "O elevă timidă încearcă să-și facă o sută de prieteni.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Ouran High School Host Club", "2006", "Comedie • Romance", "O elevă ajunge într-un club școlar cu reguli neobișnuite.", "VERIFICĂ ÎN RO"),
+    AnimeItem("The Summer Hikaru Died", "2025", "Mister • Supranatural", "Un adolescent observă că prietenul său s-a întors schimbat.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Delicious in Dungeon", "2024", "Fantasy • Aventură", "Un grup de aventurieri explorează o temniță și gătește creaturi fantastice.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Neon Genesis Evangelion", "1995", "SF • Dramă", "Adolescenți pilotează roboți uriași pentru a apăra omenirea.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Yu Yu Hakusho", "1992", "Acțiune • Supranatural", "Un adolescent devine detectiv al lumii spiritelor.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Regele șaman", "2021", "Aventură • Fantasy", "Șamanii se pregătesc pentru un turneu care decide Regele Șaman.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Violet Evergarden", "2018", "Dramă • Fantasy", "O fostă soldată învață să înțeleagă emoțiile oamenilor prin scrisori.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Cowboy Bebop", "1998", "SF • Aventură", "Vânători de recompense călătoresc prin spațiu.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Dorohedoro", "2020", "Fantasy • Acțiune", "Un bărbat cu cap de reptilă caută adevărul despre transformarea sa.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Aggretsuko", "2018", "Comedie • Viață", "O angajată își descarcă frustrările prin karaoke metal.", "VERIFICĂ ÎN RO"),
+    AnimeItem("PLUTO", "2023", "SF • Mister", "Un detectiv robot investighează o serie de crime misterioase.", "VERIFICĂ SUBTITRAREA"),
+    AnimeItem("Kotaro locuiește singur", "2022", "Comedie • Dramă", "Un băiețel neobișnuit schimbă viața vecinilor săi.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Blue Period", "2021", "Dramă • Artă", "Un elev descoperă pasiunea pentru pictură și intră într-o lume competitivă.", "VERIFICĂ ÎN RO"),
+    AnimeItem("EDENS ZERO", "2021", "SF • Aventură", "Un tânăr pornește într-o călătorie prin univers.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Unchiul dintr-o altă lume", "2022", "Comedie • Fantasy", "Un bărbat se trezește după ani de comă cu amintiri dintr-o lume fantastică.", "VERIFICĂ ÎN RO"),
+    AnimeItem("SPRIGGAN", "2022", "Acțiune • SF", "Agenți speciali protejează relicve ale unei civilizații antice.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Onmyoji", "2023", "Fantasy • Supranatural", "Un maestru al spiritelor rezolvă mistere în Japonia imperială.", "VERIFICĂ ÎN RO"),
+    AnimeItem("My Daemon", "2023", "Aventură • SF", "Un băiat și o creatură specială pornesc într-o călătorie.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Superescrocii", "2021", "Acțiune • Crimă", "Un grup de infractori cu puteri speciale pregătește o lovitură.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Viața unui casnic", "2021", "Comedie • Viață", "Un fost membru yakuza se ocupă acum de treburile casei.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Leviathan", "2025", "SF • Aventură", "O poveste alternativă despre război și mașinării extraordinare.", "VERIFICĂ ÎN RO"),
+    AnimeItem("GAMERA: Renașterea", "2023", "Acțiune • SF", "Copiii întâlnesc o creatură gigantică ce apără omenirea.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Noapte bună, lume!", "2023", "SF • Dramă", "O familie fragmentată se intersectează într-o lume virtuală.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Castlevania: Nocturne", "2023", "Fantasy • Acțiune", "Un vânător de vampiri se ridică împotriva unei noi amenințări.", "VERIFICĂ ÎN RO"),
+    AnimeItem("DOTA: Sângele dragonului", "2021", "Fantasy • Acțiune", "Un cavaler dragon este prins într-un conflict între forțe magice.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Black Clover: Sabia Regelui Vrăjitor", "2023", "Fantasy • Film", "Asta și prietenii săi se confruntă cu foști regi vrăjitori.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Prințesa Mononoke", "1997", "Fantasy • Film", "Un tânăr ajunge în mijlocul conflictului dintre oameni și natură.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Băiatul și stârcul", "2023", "Fantasy • Film", "Un băiat descoperă o lume misterioasă după o pierdere.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Ponyo", "2008", "Fantasy • Film", "O creatură marină visează să devină om.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Vecinul meu Totoro", "1988", "Fantasy • Film", "Două surori descoperă spirite magice în apropierea casei.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Kiki: Livrări la domiciliu", "1989", "Aventură • Film", "O tânără vrăjitoare își începe viața independentă.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Povestea prințesei Kaguya", "2013", "Dramă • Film", "O fetiță misterioasă crește și își caută propriul drum.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Lumea secretă a lui Arrietty", "2010", "Aventură • Film", "O fetiță minusculă trăiește ascunsă în casa oamenilor.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Regatul pisicilor", "2002", "Fantasy • Film", "O adolescentă ajunge într-un regat fantastic al pisicilor.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Șoapte din inimă", "1995", "Dramă • Film", "O adolescentă își descoperă pasiunea pentru povești și scris.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Mary și floarea vrăjitoarei", "2017", "Fantasy • Film", "O fată descoperă o floare care îi oferă puteri magice.", "VERIFICĂ ÎN RO"),
+    AnimeItem("Cosmica prințesă Kaguya!", "2026", "SF • Muzical • Film", "O fată misterioasă intră într-o lume virtuală plină de muzică.", "VERIFICĂ SUBTITRAREA"),
     AnimeItem("Attack on Titan", "2013", "Acțiune • Dramă • Fantasy", "Ultimii oameni trăiesc în spatele unor ziduri uriașe, amenințați de titani.", "CATALOG"),
     AnimeItem("Demon Slayer", "2019", "Acțiune • Fantasy", "Tanjiro pornește într-o călătorie pentru a-și salva sora.", "CATALOG"),
     AnimeItem("Jujutsu Kaisen", "2020", "Acțiune • Supranatural", "Un licean intră în lumea blestemelor și a vrăjitorilor.", "CATALOG"),
@@ -149,7 +149,7 @@ private fun AnimeRoApp() {
             Spacer(Modifier.height(18.dp))
             Text("Descoperă următorul tău anime.", color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(6.dp))
-            Text("Anime din catalogul Netflix România • verifică subtitrarea română pe pagina fiecărui titlu", color = muted, fontSize = 14.sp)
+            Text("Catalog extins • caută disponibilitatea și subtitrarea în română", color = muted, fontSize = 14.sp)
             Spacer(Modifier.height(18.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Surface(color = panel, shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f)) {
@@ -181,7 +181,7 @@ private fun AnimeRoApp() {
                     AnimeCard(item, favorites.contains(item.title), {
                         favorites = if (favorites.contains(item.title)) favorites - item.title else favorites + item.title
                     }) {
-                        val url = "https://www.netflix.com/ro/search?q=" + Uri.encode(item.title)
+                        val url = "https://www.justwatch.com/ro/cautare?q=" + Uri.encode(item.title)
                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     }
                 }
@@ -216,7 +216,7 @@ private fun AnimeCard(item: AnimeItem, favorite: Boolean, onFavorite: () -> Unit
             }
             Spacer(Modifier.width(12.dp))
             TextButton(onClick = onFavorite) { Text(if (favorite) "♥" else "♡", color = accent, fontSize = 22.sp) }
-            Button(onClick = onSearch) { Text("Deschide Netflix") }
+            Button(onClick = onSearch) { Text("Unde îl văd?") }
         }
     }
 }
