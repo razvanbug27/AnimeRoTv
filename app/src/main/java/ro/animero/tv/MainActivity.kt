@@ -23,6 +23,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 
 private data class AnimeItem(
     val title: String, val year: String, val genres: String,
@@ -121,6 +127,11 @@ private fun AnimeRoApp() {
     var selected by remember { mutableStateOf("Toate") }
     var favorites by remember { mutableStateOf(setOf<String>()) }
     var showFavorites by remember { mutableStateOf(false) }
+    var selectedAnime by remember { mutableStateOf<AnimeItem?>(null) }
+    var showUrlDialog by remember { mutableStateOf(false) }
+    var showPlayer by remember { mutableStateOf(false) }
+    var urlInput by remember { mutableStateOf("") }
+    var urlError by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val categories = listOf("Toate", "Acțiune", "Aventură", "Fantasy", "Filme")
 
@@ -137,6 +148,19 @@ private fun AnimeRoApp() {
         background = bg, surface = panel, primary = accent,
         onBackground = Color.White, onSurface = Color.White
     )) {
+        if (showPlayer && selectedAnime != null) {
+            AnimePlayerScreen(
+                title = selectedAnime!!.title,
+                url = urlInput,
+                onBack = { showPlayer = false }
+            )
+        } else if (selectedAnime != null) {
+            AnimeDetailScreen(
+                anime = selectedAnime!!,
+                onBack = { selectedAnime = null },
+                onPlay = { urlInput = ""; urlError = false; showUrlDialog = true }
+            )
+        } else {
         Column(Modifier.fillMaxSize().background(bg).padding(horizontal = 34.dp, vertical = 22.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("ANIME", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Black)
@@ -181,8 +205,7 @@ private fun AnimeRoApp() {
                     AnimeCard(item, favorites.contains(item.title), {
                         favorites = if (favorites.contains(item.title)) favorites - item.title else favorites + item.title
                     }) {
-                        val url = "https://www.justwatch.com/ro/cautare?q=" + Uri.encode(item.title)
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        selectedAnime = item
                     }
                 }
                 if (filtered.isEmpty()) item {
@@ -190,6 +213,83 @@ private fun AnimeRoApp() {
                 }
             }
         }
+        }
+        if (showUrlDialog && selectedAnime != null) {
+            AlertDialog(
+                onDismissRequest = { showUrlDialog = false },
+                title = { Text("Sursă video autorizată") },
+                text = {
+                    Column {
+                        Text("Adaugă adresa directă a videoclipului sau a fluxului HLS (.m3u8) pe care ai dreptul să îl redai. Playerul va porni în ANIME RO.")
+                        Spacer(Modifier.height(12.dp))
+                        OutlinedTextField(
+                            value = urlInput,
+                            onValueChange = { urlInput = it; urlError = false },
+                            label = { Text("Adresă video HTTPS") },
+                            singleLine = true,
+                            isError = urlError
+                        )
+                        if (urlError) Text("Introdu o adresă validă care începe cu https:// sau http://.", color = MaterialTheme.colorScheme.error)
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        if (urlInput.startsWith("https://") || urlInput.startsWith("http://")) {
+                            showUrlDialog = false
+                            showPlayer = true
+                        } else urlError = true
+                    }) { Text("Pornește playerul") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showUrlDialog = false }) { Text("Anulează") }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AnimeDetailScreen(anime: AnimeItem, onBack: () -> Unit, onPlay: () -> Unit) {
+    Column(
+        Modifier.fillMaxSize().background(bg).padding(horizontal = 42.dp, vertical = 30.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("‹  ÎNAPOI LA CATALOG", color = accent, fontSize = 14.sp, fontWeight = FontWeight.Bold,
+            modifier = Modifier.focusable().onFocusChanged { })
+        TextButton(onClick = onBack) { Text("Înapoi") }
+        Text(anime.title, color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Black)
+        Text("${anime.year}  •  ${anime.genres}", color = muted, fontSize = 15.sp)
+        Text(anime.description, color = Color(0xFFD8DEEA), fontSize = 17.sp)
+        Spacer(Modifier.height(12.dp))
+        Text("PLAYER ANIME RO", color = accent, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        Text("Redare video direct în aplicație, cu suport pentru MP4 și HLS. Subtitrările incluse în flux sunt afișate de player.", color = muted, fontSize = 14.sp)
+        Button(onClick = onPlay) { Text("Adaugă sursă și redă") }
+        Text("Notă: catalogul nu conține încă fișiere video sau licențe de streaming. Folosește doar adrese de redare furnizate legal de titularul conținutului.", color = muted, fontSize = 12.sp)
+    }
+}
+
+@Composable
+private fun AnimePlayerScreen(title: String, url: String, onBack: () -> Unit) {
+    val context = LocalContext.current
+    val player = remember(url) {
+        ExoPlayer.Builder(context).build().apply {
+            setMediaItem(MediaItem.fromUri(url))
+            prepare()
+            playWhenReady = true
+        }
+    }
+    DisposableEffect(player) {
+        onDispose { player.release() }
+    }
+    Column(Modifier.fillMaxSize().background(Color.Black).padding(24.dp)) {
+        TextButton(onClick = onBack) { Text("‹ Înapoi la ${title}", color = accent) }
+        AndroidView(
+            factory = { viewContext -> PlayerView(viewContext).apply { this.player = player; useController = true } },
+            update = { it.player = player },
+            modifier = Modifier.fillMaxWidth().weight(1f)
+        )
+        Text(title, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+        Text("Player video ANIME RO", color = muted, fontSize = 12.sp)
     }
 }
 
