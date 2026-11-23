@@ -254,8 +254,6 @@ private fun AnimeDetailScreen(anime: AnimeItem, onBack: () -> Unit, onPlay: () -
         Modifier.fillMaxSize().background(bg).padding(horizontal = 42.dp, vertical = 30.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("‹  ÎNAPOI LA CATALOG", color = accent, fontSize = 14.sp, fontWeight = FontWeight.Bold,
-            modifier = Modifier.focusable().onFocusChanged { })
         TextButton(onClick = onBack) { Text("Înapoi") }
         Text(anime.title, color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Black)
         Text("${anime.year}  •  ${anime.genres}", color = muted, fontSize = 15.sp)
@@ -316,7 +314,7 @@ private fun AnimeCard(item: AnimeItem, favorite: Boolean, onFavorite: () -> Unit
             }
             Spacer(Modifier.width(12.dp))
             TextButton(onClick = onFavorite) { Text(if (favorite) "♥" else "♡", color = accent, fontSize = 22.sp) }
-            Button(onClick = onSearch) { Text("Unde îl văd?") }
+            Button(onClick = onSearch) { Text("Detalii") }
         }
     }
 }
