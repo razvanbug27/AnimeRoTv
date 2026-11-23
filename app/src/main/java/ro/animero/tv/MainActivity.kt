@@ -128,7 +128,7 @@ private fun AnimeRoApp() {
         val matchesQuery = item.title.contains(query, ignoreCase = true) ||
             item.genres.contains(query, ignoreCase = true)
         val matchesCategory = selected == "Toate" ||
-            (selected == "Filme" && item.badge == "FILM") ||
+            (selected == "Filme" && (item.badge == "FILM" || item.genres.contains("Film", ignoreCase = true))) ||
             item.genres.contains(selected, ignoreCase = true)
         matchesQuery && matchesCategory && (!showFavorites || favorites.contains(item.title))
     }
