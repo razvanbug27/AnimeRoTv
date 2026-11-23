@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090909"><meta name="description" content="AnimeRoTv — descoperă anime-uri, trailere și unde le poți urmări legal, cu subtitrări în română.">
+<meta name="theme-color" content="#090909"><meta name="description" content="AnimeRoTv — catalog anime actualizat prin AniList.">
 <title>AnimeRoTv — Anime în română</title>
 <style>
 :root{--bg:#090909;--panel:#141414;--panel2:#1b1b1b;--red:#ed2028;--muted:#a5a5a5;--line:#292929}
@@ -13,31 +13,57 @@
 <body>
 <header class="top"><nav class="nav"><a class="logo" href="#"><b>ANIME</b>ROTV</a><div class="links"><a href="#catalog">Catalog</a><a href="#romana">În română</a><a href="#despre">Despre</a></div><div class="spacer"></div><input id="search" class="search" placeholder="Caută anime..." aria-label="Caută anime"></nav></header>
 <main>
-<section class="hero"><div class="hero-card"><div class="hero-copy"><div class="eyebrow">Lumea anime, într-un singur loc</div><h1>Povestea ta.<br><span style="color:var(--red)">Următorul episod.</span></h1><p>Descoperă titluri noi, caută după gen și găsește trailere și platforme oficiale unde poți urmări anime-urile preferate.</p><a class="btn" href="#catalog">Explorează catalogul <span>→</span></a></div></div></section>
-<section class="wrap" id="catalog"><div class="section-head"><div><h2>Catalog anime</h2><p>Selecție de titluri populare — caută și filtrează.</p></div><span class="meta" id="count"></span></div><div class="filters" id="filters"><button class="chip active" data-genre="Toate">Toate</button><button class="chip" data-genre="Acțiune">Acțiune</button><button class="chip" data-genre="Fantezie">Fantezie</button><button class="chip" data-genre="Aventură">Aventură</button><button class="chip" data-genre="Dramă">Dramă</button><button class="chip" data-genre="Thriller">Thriller</button></div><div class="grid" id="grid"></div></section>
-<section class="wrap" id="romana"><div class="info"><div><div class="eyebrow">AnimeRoTv</div><h2>Anime cu subtitrare în română</h2><p>Catalogul te ajută să descoperi seriale și să verifici unde sunt disponibile legal. Disponibilitatea subtitrărilor diferă în funcție de titlu, țară și platformă.</p><p class="note">Nu găzduim și nu redistribuim episoade protejate de drepturi de autor.</p></div><div><h2>Platforme oficiale</h2><div class="providers"><a class="provider" href="https://www.crunchyroll.com/" target="_blank" rel="noopener">Crunchyroll ↗</a><a class="provider" href="https://www.netflix.com/" target="_blank" rel="noopener">Netflix ↗</a><a class="provider" href="https://www.youtube.com/@MuseAsia" target="_blank" rel="noopener">Muse Asia ↗</a><a class="provider" href="https://www.youtube.com/@AniOneAsia" target="_blank" rel="noopener">Ani-One Asia ↗</a></div><p class="note">Verifică pagina fiecărui titlu pentru disponibilitatea regională.</p></div></div></section>
-<section class="wrap" id="despre"><div class="section-head"><div><h2>Despre AnimeRoTv</h2><p>Un loc simplu pentru fanii anime din România.</p></div></div><p style="color:#aaa;line-height:1.7;max-width:760px">AnimeRoTv este un catalog de descoperire. Poți căuta titluri, explora genuri și deschide informațiile fiecărui anime. Următoarea etapă poate adăuga conturi, liste personale și surse video autorizate.</p></section>
+<section class="hero"><div class="hero-card"><div class="hero-copy"><div class="eyebrow">Lumea anime, într-un singur loc</div><h1>Povestea ta.<br><span style="color:var(--red)">Următorul episod.</span></h1><p>Descoperă anime-uri, caută după titlu și gen și găsește următoarea poveste preferată. Catalogul este conectat la AniList.</p><a class="btn" href="#catalog">Explorează catalogul <span>→</span></a></div></div></section>
+<section class="wrap" id="catalog"><div class="section-head"><div><h2>Catalog anime</h2><p>Catalog actualizat automat din baza de date AniList.</p></div><span class="meta" id="count"></span></div><div class="filters" id="filters"><button class="chip active" data-genre="Toate">Toate</button><button class="chip" data-genre="Acțiune">Acțiune</button><button class="chip" data-genre="Fantezie">Fantezie</button><button class="chip" data-genre="Aventură">Aventură</button><button class="chip" data-genre="Dramă">Dramă</button><button class="chip" data-genre="Thriller">Thriller</button></div><div class="grid" id="grid"></div></section>
+<section class="wrap" id="romana"><div class="info"><div><div class="eyebrow">Sistemul AnimeRoTv</div><h2>Catalog conectat la AniList</h2><p>Posterele, descrierile, genurile, anul și numărul de episoade sunt preluate automat prin AniList GraphQL.</p><p class="note">AniList furnizează informații despre anime, nu fișiere video sau streamuri.</p></div><div><h2>Player AnimeRoTv</h2><p>Interfața de redare va încărca episoadele atunci când adăugăm surse video autorizate. Playerul nu va afișa linkuri către platforme externe.</p><p class="note">Sursă catalog: graphql.anilist.co</p></div></div></section>
+<section class="wrap" id="despre"><div class="section-head"><div><h2>Despre AnimeRoTv</h2><p>Un loc simplu pentru fanii anime din România.</p></div></div><p style="color:#aaa;line-height:1.7;max-width:760px">AnimeRoTv folosește AniList pentru datele catalogului. Episoadele video vor fi redate în playerul integrat doar din surse pe care avem dreptul să le folosim.</p></section>
 </main>
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modal-box"><button class="close" id="close" aria-label="Închide">×</button><div class="eyebrow">Detalii anime</div><h2 id="modalTitle"></h2><p id="modalDesc"></p><div id="modalMeta" class="meta"></div><a id="trailer" class="btn" href="#" target="_blank" rel="noopener">Vezi trailer oficial ↗</a><p class="note">Trailerul se deschide pe YouTube. Verifică platformele oficiale pentru episoade și subtitrări.</p></div></div>
 <footer>© 2026 AnimeRoTv · Creat pentru comunitatea anime din România</footer>
 <script>
-const anime=[
-{t:"Demon Slayer",g:["Acțiune","Fantezie"],y:"2019",d:"Tanjiro pornește într-o călătorie periculoasă pentru a-și salva sora și a înfrunta demonii.",img:"https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6Szಸ0w9p1VZ9Yx.jpg",q:"Demon Slayer official trailer"},
-{t:"Attack on Titan",g:["Acțiune","Dramă"],y:"2013",d:"Omenirea luptă pentru supraviețuire în spatele unor ziduri uriașe.",img:"https://image.tmdb.org/t/p/w500/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg",q:"Attack on Titan official trailer"},
-{t:"Jujutsu Kaisen",g:["Acțiune","Fantezie"],y:"2020",d:"Un licean intră în lumea blestemelor și a vrăjitorilor.",img:"https://image.tmdb.org/t/p/w500/fHpKWq9ayzSk8nSwqauhho4L Doha.jpg",q:"Jujutsu Kaisen official trailer"},
-{t:"Death Note",g:["Thriller","Dramă"],y:"2006",d:"Un caiet misterios schimbă complet viața unui elev genial.",img:"https://image.tmdb.org/t/p/w500/bV7O7M5m0x0x1f1q0x0x.jpg",q:"Death Note anime official trailer"},
-{t:"One Piece",g:["Aventură","Acțiune"],y:"1999",d:"Luffy și echipajul său pornesc în căutarea legendarei comori One Piece.",img:"https://image.tmdb.org/t/p/w500/cMD9YgbZ4q2Iap8fG5NNQpX4Q4.jpg",q:"One Piece official trailer"},
-{t:"Naruto",g:["Acțiune","Aventură"],y:"2002",d:"Un tânăr ninja visează să devină liderul satului său.",img:"https://image.tmdb.org/t/p/w500/vauCEnR7CiyBDzRCeElKkCaXIYu.jpg",q:"Naruto official trailer"},
-{t:"Chainsaw Man",g:["Acțiune","Fantezie"],y:"2022",d:"Denji ajunge într-o lume în care vânătorii se confruntă cu demoni.",img:"https://image.tmdb.org/t/p/w500/npdB6eFzizki0WaZ1OvKcJrWe.jpg",q:"Chainsaw Man official trailer"},
-{t:"Fullmetal Alchemist: Brotherhood",g:["Aventură","Dramă"],y:"2009",d:"Doi frați caută Piatra Filosofală după un experiment alchimic eșuat.",img:"https://image.tmdb.org/t/p/w500/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg",q:"Fullmetal Alchemist Brotherhood trailer"},
-{t:"My Hero Academia",g:["Acțiune","Aventură"],y:"2016",d:"Într-o lume a superputerilor, un băiat fără abilități speciale își urmează visul.",img:"https://image.tmdb.org/t/p/w500/ivOLM47yJt90P19RH1xJjueq7NT.jpg",q:"My Hero Academia official trailer"},
-{t:"Tokyo Ghoul",g:["Acțiune","Thriller"],y:"2014",d:"Un student ajunge prins între lumea oamenilor și cea a creaturilor misterioase.",img:"https://image.tmdb.org/t/p/w500/rC2Jt1b7p5q6W9v0x0.jpg",q:"Tokyo Ghoul official trailer"},
-{t:"Spy x Family",g:["Acțiune","Comedie"],y:"2022",d:"O familie neobișnuită încearcă să păstreze secretul fiecăruia.",img:"https://image.tmdb.org/t/p/w500/3r4LYFuXrg3G8fepysr4xSLWnQL.jpg",q:"Spy x Family official trailer"},
-{t:"Hunter x Hunter",g:["Aventură","Acțiune"],y:"2011",d:"Gon pornește într-o aventură pentru a-și găsi tatăl și a deveni Hunter.",img:"https://image.tmdb.org/t/p/w500/ucpgmUR1h5Te1BYegKItoPjOeF7.jpg",q:"Hunter x Hunter 2011 official trailer"}
-];
-const grid=document.querySelector('#grid'),search=document.querySelector('#search');let genre='Toate';
-function render(){let term=search.value.toLowerCase();let list=anime.filter(a=>(genre==='Toate'||a.g.includes(genre))&&(a.t.toLowerCase().includes(term)||a.d.toLowerCase().includes(term)));document.querySelector('#count').textContent=list.length+' titluri';grid.innerHTML=list.length?list.map((a,i)=>'<article class="card" data-title="'+a.t.replaceAll('"','&quot;')+'"><div class="poster"><img loading="lazy" src="'+a.img+'" alt="Poster '+a.t+'" onerror="this.style.display=\'none\'"><span class="tag">'+a.y+'</span></div><h3>'+a.t+'</h3><div class="meta">'+a.g.join(' · ')+'</div></article>').join(''):'<div class="empty">Nu am găsit titluri. Încearcă altă căutare.</div>';grid.querySelectorAll('.card').forEach(el=>el.addEventListener('click',()=>openAnime(el.dataset.title)))}
-function openAnime(title){let a=anime.find(x=>x.t===title);document.querySelector('#modalTitle').textContent=a.t;document.querySelector('#modalDesc').textContent=a.d;document.querySelector('#modalMeta').textContent=a.y+' · '+a.g.join(' · ');document.querySelector('#trailer').href='https://www.youtube.com/results?search_query='+encodeURIComponent(a.q);document.querySelector('#modal').classList.add('open')}
-search.addEventListener('input',render);document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');genre=b.dataset.genre;render()}));document.querySelector('#close').onclick=()=>document.querySelector('#modal').classList.remove('open');document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('open')});render();
+const API='https://graphql.anilist.co';
+const query=`query ($page:Int,$perPage:Int,$search:String) {
+ Page(page:$page,perPage:$perPage) {
+  media(type:ANIME,sort:POPULARITY_DESC,isAdult:false,search:$search) {
+   id title { romaji english } description(asHtml:false)
+   genres coverImage { extraLarge large } episodes seasonYear format
+   averageScore status siteUrl trailer { site id }
+  }
+ }
+}`;
+const genreMap={'Acțiune':'Action','Fantezie':'Fantasy','Aventură':'Adventure','Dramă':'Drama','Thriller':'Thriller'};
+const grid=document.querySelector('#grid'),search=document.querySelector('#search');
+let anime=[],genre='Toate',timer;
+function cleanDescription(value=''){return value.replace(/<[^>]*>/g,' ').replace(/&#039;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\\s+/g,' ').trim()||'Descriere indisponibilă.'}
+function titleOf(a){return a.title.english||a.title.romaji||'Anime fără titlu'}
+function render(){
+ const list=anime.filter(a=>(genre==='Toate'||(a.genres||[]).includes(genreMap[genre]))&&(!search.value.trim()||titleOf(a).toLowerCase().includes(search.value.trim().toLowerCase())||(a.title.romaji||'').toLowerCase().includes(search.value.trim().toLowerCase())));
+ document.querySelector('#count').textContent=list.length+' titluri';
+ grid.innerHTML=list.length?list.map(a=>'<article class="card" data-id="'+a.id+'"><div class="poster"><img loading="lazy" src="'+(a.coverImage?.extraLarge||a.coverImage?.large||'')+'" alt="Poster '+titleOf(a).replace(/"/g,'&quot;')+'" onerror="this.style.display=\'none\'"><span class="tag">'+(a.seasonYear||a.format||'ANIME')+'</span></div><h3>'+titleOf(a).replace(/</g,'&lt;')+'</h3><div class="meta">'+(a.genres||[]).slice(0,3).join(' · ')+'</div></article>').join(''):'<div class="empty">Nu am găsit titluri. Încearcă altă căutare.</div>';
+ grid.querySelectorAll('.card').forEach(el=>el.addEventListener('click',()=>openAnime(Number(el.dataset.id))));
+}
+async function loadAnime(term=''){
+ grid.innerHTML='<div class="empty">Se încarcă anime-urile...</div>';
+ try{
+  const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({query,variables:{page:1,perPage:25,...(term?{search:term}:{})}})});
+  if(!response.ok)throw new Error('AniList răspunde cu '+response.status);
+  const data=await response.json();anime=data.data.Page.media||[];render();
+ }catch(error){grid.innerHTML='<div class="empty">Nu am putut încărca catalogul AniList. Verifică conexiunea și încearcă din nou.</div>';document.querySelector('#count').textContent='';}
+}
+function openAnime(id){
+ const a=anime.find(x=>x.id===id);if(!a)return;
+ document.querySelector('#modalTitle').textContent=titleOf(a);
+ document.querySelector('#modalDesc').textContent=cleanDescription(a.description||'');
+ document.querySelector('#modalMeta').textContent=[a.seasonYear,a.format,a.episodes?(a.episodes+' episoade'):null,a.genres?.slice(0,4).join(' · ')].filter(Boolean).join(' · ');
+ const trailer=document.querySelector('#trailer');
+ if(a.trailer?.site==='youtube'&&a.trailer.id){trailer.href='https://www.youtube.com/watch?v='+a.trailer.id;trailer.style.display='inline-flex';trailer.textContent='Trailer';}
+ else{trailer.style.display='none';}
+ document.querySelector('#modal').classList.add('open');
+}
+search.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>loadAnime(search.value.trim()),450)});
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');genre=b.dataset.genre;render()}));
+document.querySelector('#close').onclick=()=>document.querySelector('#modal').classList.remove('open');
+document.querySelector('#modal').addEventListener('click',e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('open')});
+loadAnime();
 </script>
 </body></html>
