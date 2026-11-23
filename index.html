@@ -132,8 +132,8 @@ loadAnime();
    let images=[];
    if(provider==='nekos'){
     const d=await safeFetch('https://api.nekosapi.com/v4/images/random?limit=8&rating=safe');
-    const arr=Array.isArray(d)?d:(Array.isArray(d.data)?d.data:(Array.isArray(d.data?.results)?d.data.results:[]));
-    images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url,by:x.artist||'NekosAPI'})).filter(x=>x.url);
+    const arr=Array.isArray(d)?d:(Array.isArray(d.items)?d.items:(Array.isArray(d.images)?d.images:(Array.isArray(d.results)?d.results:(Array.isArray(d.data)?d.data:(Array.isArray(d.data?.items)?d.data.items:(Array.isArray(d.data?.results)?d.data.results:[]))))));
+    images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url||x.file?.url||x.image?.file_url,by:x.artist||x.artist_name||'NekosAPI'})).filter(x=>x.url);
    }else if(provider==='best'){
     const cats=['neko','waifu','smile','wave','wink','dance','highfive','happy'];
     const arr=await Promise.all(cats.map(async c=>{try{const d=await safeFetch('https://nekos.best/api/v2/'+c);return (d.results||[]).map(x=>({url:x.url,by:c+' · NekosBest'}))}catch(_){return []}}));
