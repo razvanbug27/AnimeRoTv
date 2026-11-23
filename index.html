@@ -77,4 +77,95 @@ $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-genre
 $('#refresh').addEventListener('click',()=>loadAnime(search));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 loadAnime();
 </script>
+
+<style>
+/* AnimeRoTv API extensions */
+.api-section{padding:28px 5vw}.api-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.api-tile{background:linear-gradient(145deg,#260d15,#16080d);border:1px solid #ffffff16;border-radius:12px;overflow:hidden;min-width:0}.api-tile img{width:100%;height:220px;object-fit:cover;display:block;background:#210d14}.api-tile .tile-copy{padding:12px}.api-tile strong{font-size:13px}.api-tile small{display:block;color:#bba9ae;margin-top:5px;font-size:10px}.api-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.api-action{border:1px solid #ffffff24;background:#ffffff0b;color:#eee;border-radius:7px;padding:9px 13px;font-size:11px}.api-action.active,.api-action:hover{background:#651626;border-color:#ed233b}.api-panel{background:#1b0b10;border:1px solid #48202b;border-radius:13px;padding:18px;margin-top:12px}.quote-text{font-size:17px;line-height:1.6;font-weight:650}.api-muted{color:#bba9ae;font-size:11px;line-height:1.6}.trace-form{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.trace-form input{max-width:100%;color:#ddd;font-size:12px}.trace-result{display:grid;grid-template-columns:170px 1fr;gap:16px;margin-top:15px}.trace-result img{width:100%;border-radius:8px}.trace-result video{width:100%;max-height:180px;border-radius:8px;background:#000}.api-error{color:#ff8b9a;font-size:12px}.api-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.api-heading h2{font-size:21px;margin:0}.api-heading p{font-size:11px;color:#bba9ae;margin:5px 0 0}
+@media(max-width:850px){.api-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.api-tile img{height:190px}}
+@media(max-width:520px){.api-section{padding:20px 17px}.api-grid{gap:10px}.api-tile img{height:165px}.trace-result{grid-template-columns:1fr}.api-heading h2{font-size:18px}}
+</style>
+<section class="api-section" id="discover">
+ <div class="api-heading"><div><h2>Mai multe universuri anime</h2><p>Catalog alternativ prin Jikan și Kitsu.</p></div></div>
+ <div class="api-actions"><button class="api-action active" id="jikanLoad">Jikan · MyAnimeList</button><button class="api-action" id="kitsuLoad">Kitsu</button></div>
+ <div class="api-grid" id="altCatalog"><div class="loading">Se pregătește catalogul...</div></div>
+</section>
+<section class="api-section" id="gallery">
+ <div class="api-heading"><div><h2>Galerie anime</h2><p>Imagini SFW din NekosAPI, NekosBest și Waifu.im.</p></div><button class="api-action" id="galleryRefresh">Reîncarcă ↻</button></div>
+ <div class="api-actions"><button class="api-action active" data-gallery="nekos">NekosAPI</button><button class="api-action" data-gallery="best">NekosBest · GIF</button><button class="api-action" data-gallery="waifu">Waifu.im</button></div>
+ <div class="api-grid" id="galleryGrid"><div class="loading">Se încarcă galeria...</div></div>
+</section>
+<section class="api-section" id="quote">
+ <div class="api-heading"><div><h2>Citat anime al zilei</h2><p>Un gând aleatoriu din AnimeChan.</p></div><button class="api-action" id="newQuote">Alt citat ↻</button></div>
+ <div class="api-panel"><div class="quote-text" id="quoteText">Se încarcă un citat...</div><p class="api-muted" id="quoteBy"></p></div>
+</section>
+<section class="api-section" id="trace">
+ <div class="api-heading"><div><h2>Recunoaște scena anime</h2><p>Încarcă o captură de ecran și Trace.moe încearcă să identifice anime-ul și episodul.</p></div></div>
+ <div class="api-panel"><form class="trace-form" id="traceForm"><input id="traceFile" type="file" accept="image/*" required><button class="btn primary" type="submit">Identifică scena</button></form><div id="traceStatus" class="api-muted" style="margin-top:12px">Folosește o captură clară dintr-un episod. Imaginea este trimisă către serviciul Trace.moe pentru analiză.</div><div id="traceResults"></div></div>
+</section>
+<script>
+(function(){
+ const $id=id=>document.getElementById(id);
+ const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const safeFetch=async(url,opts={})=>{const r=await fetch(url,opts);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+ let activeGallery='nekos';
+ function drawAlt(items,source){
+  const box=$id('altCatalog');
+  if(!items.length){box.innerHTML='<div class="api-error">Nu s-au găsit rezultate momentan.</div>';return}
+  box.innerHTML=items.map(x=>'<article class="api-tile">'+(x.image?'<img loading="lazy" src="'+esc(x.image)+'" alt="'+esc(x.title)+'">':'')+'<div class="tile-copy"><strong>'+esc(x.title)+'</strong><small>'+esc(x.meta||source)+'</small></div></article>').join('');
+ }
+ async function loadJikan(){
+  $id('altCatalog').innerHTML='<div class="loading">Se încarcă Jikan...</div>';
+  try{const j=await safeFetch('https://api.jikan.moe/v4/top/anime?limit=12');drawAlt((j.data||[]).map(a=>({title:a.title_english||a.title,image:a.images?.jpg?.large_image_url||a.images?.jpg?.image_url,meta:(a.year||a.aired?.prop?.from?.year||'')+' · '+(a.type||'Anime')+' · ★ '+(a.score||'—')})),'Jikan')}
+  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Jikan nu răspunde acum. Încearcă din nou mai târziu.</div>'}
+ }
+ async function loadKitsu(){
+  $id('altCatalog').innerHTML='<div class="loading">Se încarcă Kitsu...</div>';
+  try{const k=await safeFetch('https://kitsu.io/api/edge/anime?sort=popularityRank&page%5Blimit%5D=12');drawAlt((k.data||[]).map(a=>({title:a.attributes?.canonicalTitle||a.attributes?.titles?.en||'Anime',image:a.attributes?.posterImage?.large||a.attributes?.posterImage?.original,meta:(a.attributes?.startDate||'')+' · '+(a.attributes?.subtype||'Anime')+' · '+(a.attributes?.averageRating||'')+'%'})),'Kitsu')}
+  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Kitsu nu răspunde acum. Încearcă din nou mai târziu.</div>'}
+ }
+ $id('jikanLoad').addEventListener('click',()=>{$id('jikanLoad').classList.add('active');$id('kitsuLoad').classList.remove('active');loadJikan()});
+ $id('kitsuLoad').addEventListener('click',()=>{$id('kitsuLoad').classList.add('active');$id('jikanLoad').classList.remove('active');loadKitsu()});
+ async function loadGallery(provider=activeGallery){
+  activeGallery=provider;$id('galleryGrid').innerHTML='<div class="loading">Se încarcă imaginile...</div>';
+  document.querySelectorAll('[data-gallery]').forEach(b=>b.classList.toggle('active',b.dataset.gallery===provider));
+  try{
+   let images=[];
+   if(provider==='nekos'){
+    const d=await safeFetch('https://api.nekosapi.com/v4/images/random?limit=8&rating=safe');
+    const arr=Array.isArray(d)?d:(Array.isArray(d.data)?d.data:(Array.isArray(d.data?.results)?d.data.results:[]));
+    images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url,by:x.artist||'NekosAPI'})).filter(x=>x.url);
+   }else if(provider==='best'){
+    const cats=['neko','waifu','smile','wave','wink','dance','highfive','happy'];
+    const arr=await Promise.all(cats.map(async c=>{try{const d=await safeFetch('https://nekos.best/api/v2/'+c);return (d.results||[]).map(x=>({url:x.url,by:c+' · NekosBest'}))}catch(_){return []}}));
+    images=arr.flat().filter(x=>x.url);
+   }else{
+    const d=await safeFetch('https://api.waifu.im/images?IsNsfw=false&PageSize=8');
+    const arr=d.items||d.images||[];
+    images=arr.map(x=>({url:x.url||x.image_url,by:(x.tags||[]).map(t=>t.name).filter(Boolean).slice(0,2).join(' · ')||'Waifu.im'})).filter(x=>x.url);
+   }
+   if(!images.length)throw new Error('No images');
+   $id('galleryGrid').innerHTML=images.slice(0,8).map((x,i)=>'<article class="api-tile"><img loading="lazy" src="'+esc(x.url)+'" alt="Ilustrație anime" referrerpolicy="no-referrer"><div class="tile-copy"><strong>Imagine anime '+(i+1)+'</strong><small>'+esc(x.by)+'</small></div></article>').join('');
+  }catch(e){$id('galleryGrid').innerHTML='<div class="api-error">Serviciul selectat nu a returnat imagini. Încearcă altă galerie.</div>'}
+ }
+ document.querySelectorAll('[data-gallery]').forEach(b=>b.addEventListener('click',()=>loadGallery(b.dataset.gallery)));
+ $id('galleryRefresh').addEventListener('click',()=>loadGallery(activeGallery));
+ async function loadQuote(){
+  $id('quoteText').textContent='Se caută un citat...';$id('quoteBy').textContent='';
+  try{const d=await safeFetch('https://api.animechan.io/v1/quotes/random');const q=d.data;if(!q?.content)throw new Error('No quote');$id('quoteText').textContent='„'+q.content+'”';$id('quoteBy').textContent='— '+(q.character?.name||'Personaj')+' · '+(q.anime?.name||'Anime')}
+  catch(e){$id('quoteText').textContent='Citatul nu este disponibil momentan.'}
+ }
+ $id('newQuote').addEventListener('click',loadQuote);
+ $id('traceForm').addEventListener('submit',async e=>{
+  e.preventDefault();const file=$id('traceFile').files[0];if(!file)return;
+  $id('traceStatus').textContent='Analizez captura...';$id('traceResults').innerHTML='';
+  try{const fd=new FormData();fd.append('image',file);const d=await safeFetch('https://api.trace.moe/search?anilistInfo', {method:'POST',body:fd});const results=(d.result||[]).slice(0,3);
+   if(!results.length)throw new Error('No matches');
+   $id('traceStatus').textContent='Am găsit potriviri posibile:';
+   $id('traceResults').innerHTML=results.map(x=>'<div class="trace-result">'+(x.image?'<img loading="lazy" src="'+esc(x.image)+'" alt="Previzualizare scenă">':'')+'<div><strong>'+esc(x.anilist?.title?.romaji||x.filename||'Anime identificat')+'</strong><p class="api-muted">Episod: '+esc(x.episode||'?')+' · Potrivire: '+Math.round((x.similarity||0)*100)+'% · Moment: '+Math.floor(x.from||0)+'s</p>'+(x.video?'<video controls muted playsinline preload="none" src="'+esc(x.video)+'"></video>':'')+'</div></div>').join('');
+  }catch(err){$id('traceStatus').textContent='Nu am putut identifica scena. Încearcă o captură originală, clară, fără filtre.'}
+ });
+ loadJikan();loadGallery('nekos');loadQuote();
+})();
+</script>
+
 </body></html>
