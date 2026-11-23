@@ -39,10 +39,10 @@ nav{display:flex;gap:26px}nav a{font-size:13px;font-weight:650;color:#d9cbd0;tex
 <div class="actions"><button class="btn primary" id="heroDetails">▶ Descoperă</button><button class="btn ghost" onclick="document.querySelector('#catalog').scrollIntoView({behavior:'smooth'})">＋ Vezi catalogul</button></div>
 </div></section>
 <section class="content" id="genres"><div class="section-head"><div><h2>Explorează genurile</h2><p>Alege atmosfera potrivită pentru următoarea aventură.</p></div></div><div class="filters" id="filters"><button class="chip active" data-genre="ALL">Toate</button><button class="chip" data-genre="Action">Acțiune</button><button class="chip" data-genre="Adventure">Aventură</button><button class="chip" data-genre="Fantasy">Fantasy</button><button class="chip" data-genre="Drama">Dramă</button><button class="chip" data-genre="Comedy">Comedie</button><button class="chip" data-genre="Sci-Fi">SF</button><button class="chip" data-genre="Romance">Romantice</button></div></section>
-<section class="content" id="catalog"><div class="section-head"><div><h2>Populare acum</h2><p>Catalog actualizat cu informații și postere din AniList.</p></div><button class="link-button" id="refresh">Reîncarcă ↻</button></div><div class="grid" id="grid"><div class="loading"><span class="spinner"></span>Se încarcă anime-urile...</div></div><div class="empty" id="empty" hidden>Nu am găsit rezultate. Încearcă altă căutare.</div></section>
+<section class="content" id="catalog"><div class="section-head"><div><h2>Populare acum</h2><p>Descoperă povești, personaje și postere din întreaga lume anime.</p></div><button class="link-button" id="refresh">Reîncarcă ↻</button></div><div class="grid" id="grid"><div class="loading"><span class="spinner"></span>Se încarcă anime-urile...</div></div><div class="empty" id="empty" hidden>Nu am găsit rezultate. Încearcă altă căutare.</div></section>
 <section class="content" id="favorites"><div class="section-head"><div><h2>Lista mea</h2><p>Anime-urile salvate de tine pe acest dispozitiv.</p></div></div><div class="grid" id="favgrid"></div><div class="empty" id="favempty">Nu ai salvat încă niciun anime. Apasă ♡ pe un poster.</div></section>
 </main>
-<footer class="footer"><span>© 2026 ANIMETVRO · Creat pentru comunitatea anime din România.</span><span>Informațiile și imaginile anime sunt furnizate de AniList. ANIMETVRO nu găzduiește episoade video.</span></footer>
+<footer class="footer"><span>© 2026 ANIMETVRO · Creat pentru comunitatea anime din România.</span><span>Descoperă universul anime în limba română. ANIMETVRO nu găzduiește episoade video.</span></footer>
 <nav class="bottom-nav"><a class="active" href="#home"><b>⌂</b>Acasă</a><a href="#catalog"><b>◈</b>Catalog</a><a href="#catalog" onclick="document.querySelector('#search').focus()"><b>⌕</b>Cautare</a><a href="#favorites"><b>♡</b>Lista mea</a><a href="#genres"><b>⚙</b>Setări</a></nav>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><button class="close" onclick="closeModal()" aria-label="Închide">✕</button><div id="detailBody"></div></div></div>
 <script>
@@ -62,15 +62,29 @@ const fallback=[
 ];
 let anime=[],genre='ALL',search='',favorites=JSON.parse(localStorage.getItem('animetvro-favorites')||'[]'),featured=null;
 const $=s=>document.querySelector(s);
+const genreRO={Action:'Acțiune',Adventure:'Aventură',Fantasy:'Fantastic',Drama:'Dramă',Comedy:'Comedie','Sci-Fi':'Science-fiction',Romance:'Romantic',Mystery:'Mister',Horror:'Groază',Sports:'Sport',SliceofLife:'Viața de zi cu zi',Supernatural:'Supranatural',Thriller:'Thriller',Music:'Muzică',Ecchi:'Ecchi',Psychological:'Psihologic',Mecha:'Mecha'};
+function genresRO(list=[]){return list.map(g=>genreRO[g]||g).join(' · ')}
+const translationCache=JSON.parse(localStorage.getItem('animetvro-translations')||'{}');
+async function translateRO(text){
+ const source=plain(text||'');if(!source)return 'Descriere indisponibilă.';
+ if(/[ăâîșț]/i.test(source))return source;
+ const key=source.slice(0,1800);if(translationCache[key])return translationCache[key];
+ try{
+  const chunks=[];let rest=source;while(rest.length){let cut=Math.min(450,rest.length);if(cut<rest.length){const p=rest.lastIndexOf(' ',cut);if(p>250)cut=p;}chunks.push(rest.slice(0,cut));rest=rest.slice(cut).trim();}
+  const translated=[];
+  for(const chunk of chunks){const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(chunk)+'&langpair=en|ro';const response=await fetch(url);if(!response.ok)throw new Error('Traducere indisponibilă');const data=await response.json();const value=data.responseData?.translatedText;if(!value||data.responseStatus!==200)throw new Error('Traducere indisponibilă');translated.push(value);}
+  const result=translated.join(' ');translationCache[key]=result;localStorage.setItem('animetvro-translations',JSON.stringify(translationCache));return result;
+ }catch(e){return source}
+}
 function titleOf(a){return a.title?.english||a.title?.romaji||'Anime'}
 function escapeHTML(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function plain(s=''){return s.replace(/<[^>]*>/g,' ').replace(/&#039;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
-function card(a){const t=escapeHTML(titleOf(a)),img=a.coverImage?.extraLarge||a.coverImage?.large||'',saved=favorites.includes(a.id),mark=escapeHTML((a.title?.native||t).slice(0,2));return `<article class="card" onclick="openDetails(${a.id})"><div class="poster"><div class="poster-fallback">${mark}</div>${img?`<img loading="lazy" src="${escapeHTML(img)}" alt="Poster ${t}" onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">`:''}<button class="heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleFavorite(${a.id})" aria-label="Salvează la favorite">${saved?'♥':'♡'}</button><div class="poster-title">${t}</div></div><div class="card-info"><strong>${t}</strong><span>${a.seasonYear||'—'} · ${(a.genres||[]).slice(0,2).map(escapeHTML).join(' · ')}</span></div></article>`}
+function card(a){const t=escapeHTML(titleOf(a)),img=a.coverImage?.extraLarge||a.coverImage?.large||'',saved=favorites.includes(a.id),mark=escapeHTML((a.title?.native||t).slice(0,2));return `<article class="card" onclick="openDetails(${a.id})"><div class="poster"><div class="poster-fallback">${mark}</div>${img?`<img loading="lazy" src="${escapeHTML(img)}" alt="Poster ${t}" onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">`:''}<button class="heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleFavorite(${a.id})" aria-label="Salvează la favorite">${saved?'♥':'♡'}</button><div class="poster-title">${t}</div></div><div class="card-info"><strong>${t}</strong><span>${a.seasonYear||'—'} · ${escapeHTML(genresRO((a.genres||[]).slice(0,2)))}</span></div></article>`}
 function render(){const filtered=anime.filter(a=>(genre==='ALL'||(a.genres||[]).includes(genre))&&titleOf(a).toLowerCase().includes(search.toLowerCase()));$('#grid').innerHTML=filtered.map(card).join('')||'';$('#empty').hidden=filtered.length>0;const fav=anime.filter(a=>favorites.includes(a.id));$('#favgrid').innerHTML=fav.map(card).join('');$('#favempty').hidden=fav.length>0}
 async function loadAnime(term=''){ $('#grid').innerHTML='<div class="loading"><span class="spinner"></span>Se încarcă anime-urile...</div>';try{const variables={page:1,perPage:24};if(term)variables.search=term;const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({query:queryText,variables})});if(!res.ok)throw new Error('API '+res.status);const data=await res.json();anime=data.data.Page.media||[];if(!term&&anime.length){featured=anime.find(a=>titleOf(a).toLowerCase().includes('one piece'))||anime[0];setHero(featured)}}catch(e){console.warn('AniList indisponibil',e);if(!anime.length)anime=fallback;$('#grid').innerHTML='<div class="empty">Catalogul online nu este disponibil momentan. Verifică conexiunea și încearcă din nou.</div>'}render()}
-function setHero(a){if(!a)return;$('#heroTitle').textContent=titleOf(a).toUpperCase();$('#heroMeta').textContent=[a.seasonYear,(a.genres||[]).slice(0,3).join(' · '),a.averageScore?'★ '+(a.averageScore/10).toFixed(1):''].filter(Boolean).join(' · ');$('#heroDesc').textContent=plain(a.description||'Descoperă povestea acestui anime.').slice(0,230);if(a.bannerImage)$('#heroBackdrop').style.backgroundImage='linear-gradient(90deg,#100609 0%,transparent 80%),url("'+a.bannerImage+'")';$('#heroDetails').onclick=()=>openDetails(a.id)}
+function setHero(a){if(!a)return;$('#heroTitle').textContent=titleOf(a).toUpperCase();$('#heroMeta').textContent=[a.seasonYear,genresRO((a.genres||[]).slice(0,3)),a.averageScore?'★ '+(a.averageScore/10).toFixed(1):''].filter(Boolean).join(' · ');$('#heroDesc').textContent='Se pregătește descrierea în română...';translateRO(a.description||'Descoperă povestea acestui anime.').then(t=>{if(featured?.id===a.id)$('#heroDesc').textContent=t.slice(0,300)});if(a.bannerImage)$('#heroBackdrop').style.backgroundImage='linear-gradient(90deg,#100609 0%,transparent 80%),url("'+a.bannerImage+'")';$('#heroDetails').onclick=()=>openDetails(a.id)}
 function toggleFavorite(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];localStorage.setItem('animetvro-favorites',JSON.stringify(favorites));render()}
-function openDetails(id){const a=anime.find(x=>x.id===id);if(!a)return;const t=titleOf(a),img=a.coverImage?.large||a.coverImage?.extraLarge||'';$('#detailBody').innerHTML=`<div class="detail">${img?`<img src="${escapeHTML(img)}" alt="Poster ${escapeHTML(t)}">`:''}<div><div class="eyebrow">ANIMETVRO · DETALII ANIME</div><h2>${escapeHTML(t)}</h2><div class="detail-meta">${a.seasonYear||'An necunoscut'} · ${escapeHTML((a.genres||[]).join(' / '))} · ${a.episodes||'?'} episoade ${a.averageScore?' · ★ '+(a.averageScore/10).toFixed(1):''}</div><p>${escapeHTML(plain(a.description||'Descriere indisponibilă.').slice(0,850))}</p><button class="btn primary" onclick="toggleFavorite(${a.id});openDetails(${a.id})">${favorites.includes(a.id)?'♥ În lista mea':'♡ Adaugă la lista mea'}</button></div><div class="watchbox"><p><b>Unde îl poți urmări?</b><br>Verifică disponibilitatea pe platformele de streaming din România. Catalogul diferă în funcție de regiune.</p><button class="btn ghost" onclick="window.open('https://www.justwatch.com/ro/search?q='+encodeURIComponent('${escapeHTML(t)}'),'_blank','noopener')">Caută opțiuni de vizionare ↗</button></div></div>`;$ ('#modal').classList.add('open');document.body.style.overflow='hidden'}
+function openDetails(id){const a=anime.find(x=>x.id===id);if(!a)return;const t=titleOf(a),img=a.coverImage?.large||a.coverImage?.extraLarge||'';$('#detailBody').innerHTML=`<div class="detail">${img?`<img src="${escapeHTML(img)}" alt="Poster ${escapeHTML(t)}">`:''}<div><div class="eyebrow">ANIMETVRO · DETALII ANIME</div><h2>${escapeHTML(t)}</h2><div class="detail-meta">${a.seasonYear||'An necunoscut'} · ${escapeHTML(genresRO(a.genres||[]))} · ${a.episodes||'?'} episoade ${a.averageScore?' · ★ '+(a.averageScore/10).toFixed(1):''}</div><p id="detailDescription">Se pregătește descrierea în română...</p><button class="btn primary" onclick="toggleFavorite(${a.id});openDetails(${a.id})">${favorites.includes(a.id)?'♥ În lista mea':'♡ Adaugă la lista mea'}</button></div><div class="watchbox"><p><b>Unde îl poți urmări?</b><br>Verifică disponibilitatea pe platformele de streaming din România. Catalogul diferă în funcție de regiune.</p><button class="btn ghost" onclick="window.open('https://www.justwatch.com/ro/search?q='+encodeURIComponent('${escapeHTML(t)}'),'_blank','noopener')">Caută opțiuni de vizionare ↗</button></div></div>`;$ ('#modal').classList.add('open');document.body.style.overflow='hidden'}
 function closeModal(){$('#modal').classList.remove('open');document.body.style.overflow=''}
 $('#search').addEventListener('input',e=>{search=e.target.value;render();if(search.length>2)loadAnime(search)});
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-genre]');if(!b)return;genre=b.dataset.genre;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});
@@ -85,22 +99,22 @@ loadAnime();
 @media(max-width:520px){.api-section{padding:20px 17px}.api-grid{gap:10px}.api-tile img{height:165px}.trace-result{grid-template-columns:1fr}.api-heading h2{font-size:18px}}
 </style>
 <section class="api-section" id="discover">
- <div class="api-heading"><div><h2>Mai multe universuri anime</h2><p>Catalog alternativ prin Jikan și Kitsu.</p></div></div>
- <div class="api-actions"><button class="api-action active" id="jikanLoad">Jikan · MyAnimeList</button><button class="api-action" id="kitsuLoad">Kitsu</button></div>
+ <div class="api-heading"><div><h2>Mai multe universuri anime</h2><p>Mai multe titluri, cu postere și informații despre fiecare anime.</p></div></div>
+ <div class="api-actions"><button class="api-action active" id="jikanLoad">Catalog popular</button><button class="api-action" id="kitsuLoad">Catalog alternativ</button></div>
  <div class="api-grid" id="altCatalog"><div class="loading">Se pregătește catalogul...</div></div>
 </section>
 <section class="api-section" id="gallery">
- <div class="api-heading"><div><h2>Galerie anime</h2><p>Imagini SFW din NekosAPI, NekosBest și Waifu.im.</p></div><button class="api-action" id="galleryRefresh">Reîncarcă ↻</button></div>
- <div class="api-actions"><button class="api-action active" data-gallery="nekos">NekosAPI</button><button class="api-action" data-gallery="best">NekosBest · GIF</button><button class="api-action" data-gallery="waifu">Waifu.im</button></div>
+ <div class="api-heading"><div><h2>Galerie anime</h2><p>Ilustrații și imagini tematice din universul anime.</p></div><button class="api-action" id="galleryRefresh">Reîncarcă ↻</button></div>
+ <div class="api-actions"><button class="api-action active" data-gallery="nekos">Ilustrații</button><button class="api-action" data-gallery="best">Animații GIF</button><button class="api-action" data-gallery="waifu">Wallpapers</button></div>
  <div class="api-grid" id="galleryGrid"><div class="loading">Se încarcă galeria...</div></div>
 </section>
 <section class="api-section" id="quote">
- <div class="api-heading"><div><h2>Citat anime al zilei</h2><p>Un gând aleatoriu din AnimeChan.</p></div><button class="api-action" id="newQuote">Alt citat ↻</button></div>
+ <div class="api-heading"><div><h2>Citat anime al zilei</h2><p>Cuvinte memorabile din universul anime.</p></div><button class="api-action" id="newQuote">Alt citat ↻</button></div>
  <div class="api-panel"><div class="quote-text" id="quoteText">Se încarcă un citat...</div><p class="api-muted" id="quoteBy"></p></div>
 </section>
 <section class="api-section" id="trace">
- <div class="api-heading"><div><h2>Recunoaște scena anime</h2><p>Încarcă o captură de ecran și Trace.moe încearcă să identifice anime-ul și episodul.</p></div></div>
- <div class="api-panel"><form class="trace-form" id="traceForm"><input id="traceFile" type="file" accept="image/*" required><button class="btn primary" type="submit">Identifică scena</button></form><div id="traceStatus" class="api-muted" style="margin-top:12px">Folosește o captură clară dintr-un episod. Imaginea este trimisă către serviciul Trace.moe pentru analiză.</div><div id="traceResults"></div></div>
+ <div class="api-heading"><div><h2>Recunoaște scena anime</h2><p>Încarcă o captură de ecran pentru a afla din ce anime și episod provine.</p></div></div>
+ <div class="api-panel"><form class="trace-form" id="traceForm"><input id="traceFile" type="file" accept="image/*" required><button class="btn primary" type="submit">Identifică scena</button></form><div id="traceStatus" class="api-muted" style="margin-top:12px">Folosește o captură clară dintr-un episod. Alege o captură clară dintr-un episod pentru rezultate cât mai bune.</div><div id="traceResults"></div></div>
 </section>
 <script>
 (function(){
@@ -113,40 +127,40 @@ loadAnime();
   if(!items.length){box.innerHTML='<div class="api-error">Nu s-au găsit rezultate momentan.</div>';return}
   box.innerHTML=items.map(x=>'<article class="api-tile">'+(x.image?'<img loading="lazy" src="'+esc(x.image)+'" alt="'+esc(x.title)+'">':'')+'<div class="tile-copy"><strong>'+esc(x.title)+'</strong><small>'+esc(x.meta||source)+'</small></div></article>').join('');
  }
- async function loadKitsu(){
-  $id('altCatalog').innerHTML='<div class="loading">Se încarcă Kitsu...</div>';
-  try{const k=await safeFetch('https://kitsu.io/api/edge/anime?sort=popularityRank&page%5Blimit%5D=12');const rows=Array.isArray(k.data)?k.data:[];drawAlt(rows.map(a=>({title:a.attributes?.canonicalTitle||a.attributes?.titles?.en||a.attributes?.titles?.en_jp||'Anime',image:a.attributes?.posterImage?.large||a.attributes?.posterImage?.original||a.attributes?.posterImage?.small,meta:(a.attributes?.startDate||'')+' · '+(a.attributes?.subtype||'Anime')+' · '+(a.attributes?.averageRating||'')+'%'})).filter(x=>x.image),'Kitsu')}
-  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Kitsu nu răspunde momentan. Reîncearcă în câteva secunde.</div>'}
+ async function loadCatalog alternativ(){
+  $id('altCatalog').innerHTML='<div class="loading">Se încarcă Catalog alternativ...</div>';
+  try{const k=await safeFetch('https://kitsu.io/api/edge/anime?sort=popularityRank&page%5Blimit%5D=12');const rows=Array.isArray(k.data)?k.data:[];drawAlt(rows.map(a=>({title:a.attributes?.canonicalTitle||a.attributes?.titles?.en||a.attributes?.titles?.en_jp||'Anime',image:a.attributes?.posterImage?.large||a.attributes?.posterImage?.original||a.attributes?.posterImage?.small,meta:(a.attributes?.startDate||'')+' · '+(a.attributes?.subtype||'Anime')+' · '+(a.attributes?.averageRating||'')+'%'})).filter(x=>x.image),'Catalog alternativ')}
+  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Catalog alternativ nu răspunde momentan. Reîncearcă în câteva secunde.</div>'}
  }
  async function loadJikan(){
-  $id('altCatalog').innerHTML='<div class="loading">Se încarcă Jikan...</div>';
+  $id('altCatalog').innerHTML='<div class="loading">Se încarcă titlurile...</div>';
   try{const j=await safeFetch('https://api.jikan.moe/v4/top/anime?limit=12');const rows=Array.isArray(j.data)?j.data:[];if(!rows.length)throw new Error('Fără rezultate');drawAlt(rows.map(a=>({title:a.title_english||a.title,image:a.images?.webp?.large_image_url||a.images?.jpg?.large_image_url||a.images?.jpg?.image_url,meta:(a.year||a.aired?.prop?.from?.year||'')+' · '+(a.type||'Anime')+' · ★ '+(a.score||'—')})).filter(x=>x.image),'Jikan')}
-  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Jikan este momentan indisponibil; afișez automat catalogul Kitsu.</div>';await loadKitsu();$id('jikanLoad').classList.remove('active');$id('kitsuLoad').classList.add('active')}
+  catch(e){$id('altCatalog').innerHTML='<div class="api-error">Jikan este momentan indisponibil; afișez automat catalogul Catalog alternativ.</div>';await loadCatalog alternativ();$id('jikanLoad').classList.remove('active');$id('kitsuLoad').classList.add('active')}
  }
  $id('jikanLoad').addEventListener('click',()=>{$id('jikanLoad').classList.add('active');$id('kitsuLoad').classList.remove('active');loadJikan()});
- $id('kitsuLoad').addEventListener('click',()=>{$id('kitsuLoad').classList.add('active');$id('jikanLoad').classList.remove('active');loadKitsu()});
+ $id('kitsuLoad').addEventListener('click',()=>{$id('kitsuLoad').classList.add('active');$id('jikanLoad').classList.remove('active');loadCatalog alternativ()});
  async function loadGallery(provider=activeGallery){
   activeGallery=provider;$id('galleryGrid').innerHTML='<div class="loading">Se încarcă imaginile...</div>';
   document.querySelectorAll('[data-gallery]').forEach(b=>b.classList.toggle('active',b.dataset.gallery===provider));
-  const nekosBestFallback=async()=>{const cats=['neko','waifu','smile','wave','wink','happy'];const out=[];for(const cat of cats){try{const d=await safeFetch('https://nekos.best/api/v2/'+cat);(d.results||[]).forEach(x=>{if(x.url)out.push({url:x.url,by:cat+' · NekosBest'})});if(out.length>=8)break}catch(_){}}return out};
+  const nekosBestFallback=async()=>{const cats=['neko','waifu','smile','wave','wink','happy'];const out=[];for(const cat of cats){try{const d=await safeFetch('https://nekos.best/api/v2/'+cat);(d.results||[]).forEach(x=>{if(x.url)out.push({url:x.url,by:cat+' · Galerie'})});if(out.length>=8)break}catch(_){}}return out};
   try{
    let images=[];
    if(provider==='nekos'){
     try{
      const d=await safeFetch('https://api.nekosapi.com/v4/images/random?limit=8&rating=safe');
      const arr=Array.isArray(d)?d:(Array.isArray(d.items)?d.items:(Array.isArray(d.images)?d.images:(Array.isArray(d.results)?d.results:(Array.isArray(d.data)?d.data:(Array.isArray(d.data?.items)?d.data.items:(Array.isArray(d.data?.results)?d.data.results:(d.data&&typeof d.data==='object'?[d.data]:[])))))));
-     images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url||x.file?.url||x.image?.file_url,by:x.artist||x.artist_name||'NekosAPI'})).filter(x=>x.url);
+     images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url||x.file?.url||x.image?.file_url,by:x.artist||x.artist_name||'Ilustrații'})).filter(x=>x.url);
      if(!images.length)throw new Error('Răspuns fără imagini');
-    }catch(_){images=await nekosBestFallback();if(!images.length)throw new Error('NekosAPI și fallback indisponibile');}
+    }catch(_){images=await nekosBestFallback();if(!images.length)throw new Error('Ilustrații și fallback indisponibile');}
    }else if(provider==='best'){
     images=await nekosBestFallback();
    }else{
     try{
      const d=await safeFetch('https://api.waifu.im/images?IsNsfw=false&PageSize=8');
      const arr=d.items||d.images||d.data||[];
-     images=(Array.isArray(arr)?arr:[]).map(x=>({url:x.url||x.image_url||x.image?.url,by:(x.tags||[]).map(t=>t.name||t).filter(Boolean).slice(0,2).join(' · ')||'Waifu.im'})).filter(x=>x.url);
+     images=(Array.isArray(arr)?arr:[]).map(x=>({url:x.url||x.image_url||x.image?.url,by:(x.tags||[]).map(t=>t.name||t).filter(Boolean).slice(0,2).join(' · ')||'Wallpapers'})).filter(x=>x.url);
      if(!images.length)throw new Error('Fără imagini');
-    }catch(_){images=await nekosBestFallback();if(!images.length)throw new Error('Waifu.im și fallback indisponibile');}
+    }catch(_){images=await nekosBestFallback();if(!images.length)throw new Error('Wallpapers și fallback indisponibile');}
    }
    if(!images.length)throw new Error('No images');
    $id('galleryGrid').innerHTML=images.slice(0,8).map((x,i)=>'<article class="api-tile"><img loading="lazy" src="'+esc(x.url)+'" alt="Ilustrație anime" referrerpolicy="no-referrer" onerror="this.closest(\'.api-tile\').remove()"><div class="tile-copy"><strong>Imagine anime '+(i+1)+'</strong><small>'+esc(x.by)+'</small></div></article>').join('');
@@ -158,15 +172,15 @@ loadAnime();
    if(provider==='nekos'){
     const d=await safeFetch('https://api.nekosapi.com/v4/images/random?limit=8&rating=safe');
     const arr=Array.isArray(d)?d:(Array.isArray(d.items)?d.items:(Array.isArray(d.images)?d.images:(Array.isArray(d.results)?d.results:(Array.isArray(d.data)?d.data:(Array.isArray(d.data?.items)?d.data.items:(Array.isArray(d.data?.results)?d.data.results:[]))))));
-    images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url||x.file?.url||x.image?.file_url,by:x.artist||x.artist_name||'NekosAPI'})).filter(x=>x.url);
+    images=arr.map(x=>({url:x.url||x.image_url||x.file_url||x.image?.url||x.file?.url||x.image?.file_url,by:x.artist||x.artist_name||'Ilustrații'})).filter(x=>x.url);
    }else if(provider==='best'){
     const cats=['neko','waifu','smile','wave','wink','dance','highfive','happy'];
-    const arr=await Promise.all(cats.map(async c=>{try{const d=await safeFetch('https://nekos.best/api/v2/'+c);return (d.results||[]).map(x=>({url:x.url,by:c+' · NekosBest'}))}catch(_){return []}}));
+    const arr=await Promise.all(cats.map(async c=>{try{const d=await safeFetch('https://nekos.best/api/v2/'+c);return (d.results||[]).map(x=>({url:x.url,by:c+' · Galerie'}))}catch(_){return []}}));
     images=arr.flat().filter(x=>x.url);
    }else{
     const d=await safeFetch('https://api.waifu.im/images?IsNsfw=false&PageSize=8');
     const arr=d.items||d.images||[];
-    images=arr.map(x=>({url:x.url||x.image_url,by:(x.tags||[]).map(t=>t.name).filter(Boolean).slice(0,2).join(' · ')||'Waifu.im'})).filter(x=>x.url);
+    images=arr.map(x=>({url:x.url||x.image_url,by:(x.tags||[]).map(t=>t.name).filter(Boolean).slice(0,2).join(' · ')||'Wallpapers'})).filter(x=>x.url);
    }
    if(!images.length)throw new Error('No images');
    $id('galleryGrid').innerHTML=images.slice(0,8).map((x,i)=>'<article class="api-tile"><img loading="lazy" src="'+esc(x.url)+'" alt="Ilustrație anime" referrerpolicy="no-referrer"><div class="tile-copy"><strong>Imagine anime '+(i+1)+'</strong><small>'+esc(x.by)+'</small></div></article>').join('');
@@ -176,8 +190,8 @@ loadAnime();
  $id('galleryRefresh').addEventListener('click',()=>loadGallery(activeGallery));
  async function loadQuote(){
   $id('quoteText').textContent='Se caută un citat...';$id('quoteBy').textContent='';
-  try{const d=await safeFetch('https://api.animechan.io/v1/quotes/random');const q=d.data||d.quote||d;if(!q?.content)throw new Error('AnimeChan indisponibil');$id('quoteText').textContent='„'+q.content+'”';$id('quoteBy').textContent='— '+(q.character?.name||q.character||'Personaj')+' · '+(q.anime?.name||q.anime||'Anime')}
-  catch(e){const original=['Chiar și pașii mici te pot duce spre o aventură uriașă.','Curajul nu înseamnă să nu ai teamă, ci să continui să înveți.','Fiecare poveste începe atunci când alegi să mergi mai departe.'];$id('quoteText').textContent='„'+original[Math.floor(Math.random()*original.length)]+'”';$id('quoteBy').textContent='— Citat original ANIMETVRO · AnimeChan indisponibil momentan'}
+  try{const d=await safeFetch('https://api.animechan.io/v1/quotes/random');const q=d.data||d.quote||d;if(!q?.content)throw new Error('Citat indisponibil');$id('quoteText').textContent='„'+q.content+'”';$id('quoteBy').textContent='— '+(q.character?.name||q.character||'Personaj')+' · '+(q.anime?.name||q.anime||'Anime')}
+  catch(e){const original=['Chiar și pașii mici te pot duce spre o aventură uriașă.','Curajul nu înseamnă să nu ai teamă, ci să continui să înveți.','Fiecare poveste începe atunci când alegi să mergi mai departe.'];$id('quoteText').textContent='„'+original[Math.floor(Math.random()*original.length)]+'”';$id('quoteBy').textContent='— Citat original ANIMETVRO'}
  }
  $id('newQuote').addEventListener('click',loadQuote);
  $id('traceForm').addEventListener('submit',async e=>{
