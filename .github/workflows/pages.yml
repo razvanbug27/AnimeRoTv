@@ -1,7 +1,10 @@
-name: Deploy ANIME RO TV
+name: Deploy AnimeRoTv website
 on:
   push:
     branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,10 +26,10 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Upload site
+      - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: docs
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
